@@ -1,8 +1,12 @@
 # This file contains metadata for your plugin. Since 
-# version 2.0 of QGIS this is the proper way to supply 
-# information about a plugin. The old method of 
-# embedding metadata in __init__.py will 
-# is no longer supported since version 2.0.
+
+# version 2.0 of QGIS this is the proper way to supply 
+
+# information about a plugin. The old method of 
+
+# embedding metadata in __init__.py will 
+
+# is no longer supported since version 2.0.
 
 
 # This file should be included when you package your plugin.
@@ -30,17 +34,22 @@ email=mafal@sdfe.dk
 
 about=Quality Control for various Remote Sensing productions. 
 
-This plugin contains 4 tabs with the following functions: 
+This plugin contains 6 tabs with the following functions: 
 
-1: PPC or Footprint format and attributes check. (GDS, SunAngle, Tilt, reference sysmtem...). 
+1:Indexinng of folders or disks
 
-2: Upload of PPC or Footprint to SDFE database. 
+2: PPC or Footprint format and attributes check. (GDS, SunAngle, Tilt, reference sysmtem...). 
 
-3: Pending (image histogram mining). 
+3: Upload of PPC or Footprint to SDFE database. 
 
-4: Completion QC. Checks that every PPC or Footprint in the database hase a has a corresponding image on disc. 
+4:instruction to upload data to NAS
 
------------------------------------------------------- Plugin is for use internally in SDFE 09-10-2017 
+5:Image histogram mining 
+
+6: Completion QC. Checks that every PPC or Footprint in the database hase a has a corresponding image on disc. 
+
+------------------------------------------------------ 
+Plugin is for use internally in SDFE 09-10-2017 
 
 -MF
 
