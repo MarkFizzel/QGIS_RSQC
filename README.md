@@ -1,2 +1,2 @@
 # QGIS_RSQC
-RemoteSensingQualityControle plugin for QGIS
+Remote Sensing Quality Control plugin for QGIS
