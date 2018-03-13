@@ -28,9 +28,16 @@ from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.utils import *
 from datetime import datetime
-import re, os, sys, hashlib
+from osgeo import gdal
+import re, os, sys, hashlib, getopt
 import psycopg2
-#import sys
+import gdalhist
+import FindUSBname
+import subprocess
+import socket
+import win32api
+import math
+import glob
 # plugin_path = os.path.dirname(os.path.realpath(__file__))
 #sys.path.insert(0, plugin_path+'/subscripts')
 from subscripts import SubScripts
@@ -46,6 +53,7 @@ class WorkThread1(QtCore.QThread):
         QtCore.QThread.__init__(self)
         # define variables from settings file
         self.ProjectLog, self.MainLog, self.PPC_GSD, self.Sun, self.Tilt, self.CamCal, self.ImageDir, self.DBImageDir, self.DBname, self.DBhost, self.DBport, self.DBuser, self.DBpass, self.DBschema, self.DBtable, self.DB_footprint, self.DB_ppc = self.readSettings2
+        self.killed = False
     def __del__(self):
         self.wait()
 
@@ -54,6 +62,7 @@ class WorkThread1(QtCore.QThread):
         settingsFile = os.path.dirname(__file__) + "\\settings.txt"
         ProjectLog, MainLog, PPC_GSD, Sun, Tilt, CamCal, ImageDir, DBImageDir, DBname, DBhost, DBport, DBuser, DBpass, DBsch, DBtab, DB_ob, DB_nadir = SubScripts.readsettings(settingsFile)
         return (ProjectLog, MainLog, PPC_GSD, Sun, Tilt, CamCal, ImageDir, DBImageDir, DBname, DBhost, DBport, DBuser, DBpass, DBsch, DBtab, DB_ob, DB_nadir)
+
 
     def run(self):
         liste = []
@@ -73,13 +82,11 @@ class WorkThread1(QtCore.QThread):
         dirpath,nextdiskindex = SubScripts.readtxt1()
         patternname = re.compile("[0-9]{4}_[0-9]{3}[A-Z]{1}")
         if nextdiskindex in liste:
-            QMessageBox.information(None, "General Information", "Index already in use!. Pick another")
-            return
+            self.emit(QtCore.SIGNAL("update2(QString)"), "Index already in use!. Pick another")
         elif patternname.match(nextdiskindex):
             pass
         else:
-            QMessageBox.information(None, "General Information", "Error in Index name: " + nextdiskindex + "\nShould be in the format [year]_[three digget number][Capital A,B or C] Ex:\"2017_001A\"")
-            return
+            self.emit(QtCore.SIGNAL("update2(QString)"), "Error in Index name: " + nextdiskindex + "\nShould be in the format [year]_[three digget number][Capital A,B or C] Ex:\"2017_001A\"")
 
         driveletter = dirpath[0:1]
         with open(os.path.dirname(__file__) + "\\" + "tempScript" + ".bat", "a") as bat_file:
@@ -117,12 +124,20 @@ class WorkThread1(QtCore.QThread):
 
         pgrnum = 0
         pgrcount = 0
+        killed = 'False'
+
 
         for root, dirs, files in os.walk(dirpath, topdown=True):
             for name in files:
                 pgrnum += 1
         for root, dirs, files in os.walk(dirpath, topdown=True):
             for name in files:
+                try:
+                    killed = SubScripts.readtxt4()
+                    if killed == 'True':
+                        break
+                except:
+                    pass
                 try:
                     pgrcount += 1
                     datecreated = ''
@@ -281,6 +296,12 @@ class WorkThread2(QtCore.QThread):
                     for i in range(0, (len(obj['ImageID']))):
                         n += 1
                         try:
+                            killed = SubScripts.readtxt4()
+                            if killed == 'True':
+                                break
+                        except:
+                            pass
+                        try:
                             if overwritedata == '1':
                                 cur.execute("select exists(SELECT imageid FROM " + DB_schema + "." + DB_table + " WHERE imageid = %s)", (obj['ImageID'][i],))
                                 if cur.fetchone()[0] is True:
@@ -419,6 +440,12 @@ class WorkThread2(QtCore.QThread):
                     for i in range(0, (len(obj['ImageID']))):
                         n += 1
                         try:
+                            killed = SubScripts.readtxt4()
+                            if killed == 'True':
+                                break
+                        except:
+                            pass
+                        try:
                             if overwritedata == '1':
                                 cur.execute("select exists(SELECT imageid FROM "+ DB_schema + "." + DB_table + " WHERE imageid = %s)",(obj['ImageID'][i],))
                                 if cur.fetchone()[0] is True:
@@ -482,7 +509,7 @@ class WorkThread2(QtCore.QThread):
                             conn.rollback()
                             print 'commit error - rolling back'
                     conn.commit()
-                    rapporten = "Upload of: \n" + layer1 + "\n \nINFO: \n"
+                    rapporten = "Upload of: \n" + layer1 + "\n \nINFO: \n Total number of PPC/Footprints: "+str(len(obj['ImageID']))+ "\n \n"
 
                     if createtable == '1':
                         rapporten = rapporten + 'Table '+ self.DB_ppc + ' created - this is the first entry\n'
@@ -505,9 +532,183 @@ class WorkThread2(QtCore.QThread):
         except Exception, e:
             QMessageBox.information(None, "General Info", 'ERROR:', e[0])
 
-        rapporten = rapporten + "\n See rapport file for specifics - pending"
-        self.emit(QtCore.SIGNAL('update7(QString)'), rapporten)
+        if killed == 'True':
+            rapporten = rapporten + "\n See rapport file for specifics - pending"
+            self.emit(QtCore.SIGNAL('update7(QString)'), rapporten)
+        else:
+            rapporten = rapporten + "\n See rapport file for specifics - pending"
+            self.emit(QtCore.SIGNAL('update8(QString)'), rapporten)
 
+class WorkThread3(QtCore.QThread):
+    def __init__(self):
+        QtCore.QThread.__init__(self)
+        # define variables from settings file
+        self.ProjectLog, self.MainLog, self.PPC_GSD, self.Sun, self.Tilt, self.CamCal, self.ImageDir, self.DBImageDir, self.DBname, self.DBhost, self.DBport, self.DBuser, self.DBpass, self.DBschema, self.DBtable, self.DB_footprint, self.DB_ppc = self.readSettings2
+    def __del__(self):
+        self.wait()
+
+    @property
+    def readSettings2(self):
+        settingsFile = os.path.dirname(__file__) + "\\settings.txt"
+        ProjectLog, MainLog, PPC_GSD, Sun, Tilt, CamCal, ImageDir, DBImageDir, DBname, DBhost, DBport, DBuser, DBpass, DBsch, DBtab, DB_ob, DB_nadir = SubScripts.readsettings(settingsFile)
+        return (ProjectLog, MainLog, PPC_GSD, Sun, Tilt, CamCal, ImageDir, DBImageDir, DBname, DBhost, DBport, DBuser, DBpass, DBsch, DBtab, DB_ob, DB_nadir)
+
+    def check_hist(filen):
+        print "test"
+        filstat = gdalhist.main(['', '-hist', filen])
+
+        lowerlim = 999
+        upperlim = 999
+
+        for i in filstat:
+            if i[0] != 'value' and lowerlim == 999 and i[2] > 0.01 and i[4] > 0.01 and i[6] > 0.01:
+                lowerlim = i[0]
+            if i[0] != 'value' and upperlim == 999 and i[2] > 0.99 and i[4] > 0.99 and i[6] > 0.99:
+                upperlim = i[0]
+
+        # print str(lowerlim) + " " + str(upperlim)
+        return (lowerlim, upperlim)
+
+    def run(self):
+        (overwritedata, select, path, drevnavn, DB_table) = SubScripts.readtxt3()
+        try:
+            path = path.replace('\\','\\\\')
+            skipfactor = 1
+            filantal = 0
+            if DB_table == self.DB_footprint:
+                production = 3
+            else:
+                production = 1
+        except:
+            print "running on local settings"
+
+        conn = psycopg2.connect("dbname=" + self.DBname + " user=" + self.DBuser + " host=" + self.DBhost + " password=" + self.DBpass)
+        cur = conn.cursor()
+
+        #jobnavn = str(win32api.GetVolumeInformation(os.path.splitdrive(path)[0])[0])
+        jobnavn = str(os.path.splitdrive(path)[0])
+        tiftest = []
+        jpgtest = []
+        imtemp = []
+        imfiles = []
+
+
+        if production == 3:
+            imtemp = glob.glob(path+"\\**\\**\\*.jpg")
+            for i in imtemp:
+                imfiles.append(i.replace('\\','\\\\'))
+        else:
+            try:
+                # list both tiff or jpeg imagery
+                tiftest = glob.glob(path+"\\*.tif")
+                jpgtest = glob.glob(path+"\\*.jpg")
+            except:
+                print self.emit(QtCore.SIGNAL('update2(QString)'), "Error: Maybe production is oblique")
+        if tiftest:
+            for i in tiftest:
+                imfiles.append(i.replace('\\','\\\\'))
+        elif jpgtest:
+            for i in jpgtest:
+                imfiles.append(i.replace('\\','\\\\'))
+        else:
+            pass
+
+        #subprocess.call(["cmd", "/c", "dir " + path + "\\*.tif /s /b >" + dirfile])
+        #self.emit(QtCore.SIGNAL('update2(QString)'), str(dirfile))
+        drevnavn = FindUSBname.getusbname(os.path.splitdrive(path)[0])
+        nowreadingnr = 0.0
+        filantal = len(imfiles)
+
+
+        for line in imfiles:
+            try:
+                killed = SubScripts.readtxt4()
+                if killed == 'True':
+                    break
+            except:
+                pass
+            line = line.replace('\\', '/')
+            line = line.replace('//', '/')
+            filnavn = os.path.basename(line)
+            filnavn = (os.path.splitext(filnavn)[0])
+            if production == 1:
+                filnavn = filnavn[0:18]
+            elif production == 2:
+                filnavn = filnavn[0:18]
+            elif production == 3:
+                filnavn = filnavn[0:26]
+            #self.emit(QtCore.SIGNAL('update2(QString)'), str(filnavn))
+
+            dbkald = "update " + self.DBschema + "." + DB_table + " set \"path\" = \'"+ line +"\' WHERE imageid = \'" + str(filnavn)+"\'"
+            cur.execute(dbkald)
+            dbkald = "update " + self.DBschema + "." + DB_table + " set \"drive\" = \'" + drevnavn + "\' WHERE imageid = \'" + str(filnavn) + "\'"
+            cur.execute(dbkald)
+            rowtal = cur.rowcount
+
+
+
+            if rowtal == 1:
+                decimalnow = (nowreadingnr / skipfactor)
+                if str(decimalnow - int(decimalnow))[1:] == '.0':
+                    try:
+                        filstat = gdalhist.main(['', '-hist', line])
+                        lowerlim = 999
+                        upperlim = 999
+
+                        for i in filstat:
+                            if i[0] != 'value' and lowerlim == 999 and i[2] > 0.01 and i[4] > 0.01 and i[6] > 0.01:
+                                lowerlim = i[0]
+                            if i[0] != 'value' and upperlim == 999 and i[2] > 0.99 and i[4] > 0.99 and i[6] > 0.99:
+                                upperlim = i[0]
+                    except:
+                        lowerlim = 999
+                        upperlim = 999
+
+                    self.emit(QtCore.SIGNAL('update2(QString)'), "Arbejder på: \n"+str(filnavn) + ": hist low-" + str(lowerlim) + " & hist high-" + str(upperlim))
+                    dbkald = "update " + self.DBschema + "." + DB_table + " set \"hist_low\" = \'" + str(lowerlim) + "\' WHERE imageid = \'" + str(filnavn) + "\'"
+                    cur.execute(dbkald)
+                    dbkald = "update " + self.DBschema + "." + DB_table + " set \"hist_high\" = \'" + str(upperlim) + "\' WHERE imageid = \'" + str(filnavn) + "\'"
+                    cur.execute(dbkald)
+
+                nowreadingnr = nowreadingnr + 1
+            else:
+                self.emit(QtCore.SIGNAL('update2(QString)'), 'cannot find foto in DB')
+                break
+            conn.commit()
+            pdone = int(float(nowreadingnr) / float(filantal) * 100)
+            self.emit(QtCore.SIGNAL('update1(QString)'), str(pdone))
+            if int((math.modf(pdone / 1))[0] * 100) == 0:
+                propath = "F:\\GEO\\DATA\\RemoteSensing\\Drift\\Processing\\"
+                maskinenavn = (socket.gethostname())
+                with open(propath + maskinenavn + ".html", "w") as text_file:
+                    text_file.write("<!DOCTYPE html>" + " \n")
+                    text_file.write("<html>" + " \n")
+                    text_file.write("<title>GEO Processing</title>" + " \n")
+                    text_file.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" + " \n")
+                    text_file.write("<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">" + " \n")
+                    text_file.write("<body>" + " \n")
+                    text_file.write("<div class=\"w3-container\">" + " \n")
+                    text_file.write("  <button type=\"button\" class=\"btn btn-info\" onclick=\"InfoFunction()\" >Info</button> \n")
+                    if int(pdone) >= 100:
+                        text_file.write("  <h7>" + maskinenavn + " is idle</h7>" + " \n")
+                        text_file.write("  <div class=\"w3-light-grey w3-small w3-border w3-round-large\">" + " \n")
+                        text_file.write("    <div class=\"w3-container w3-green w3-center w3-round-large\" style=\"width:100%\">All done</div>" + " \n")
+                        text_file.write("  </div>" + " \n")
+                    else:
+                        text_file.write("  <h7>" + maskinenavn + " running " + drevnavn + "</h7>" + " \n")
+                        text_file.write("  <div class=\"w3-light-grey w3-small w3-border w3-round-large\">" + " \n")
+                        text_file.write("    <div class=\"w3-container w3-blue w3-center w3-round-large\" style=\"width:" + str(pdone) + "%\">" + str(pdone) + "%</div>" + " \n")
+                        text_file.write("  </div>" + " \n")
+                    text_file.write("" + " \n")
+                    text_file.write("<script>" + " \n")
+                    text_file.write("function InfoFunction() {" + " \n")
+                    text_file.write("    alert(\"Hist high: "+str(upperlim)+" \& Hist low: "+str(lowerlim)+"\");" + " \n")
+                    text_file.write("}" + " \n")
+                    text_file.write("</script>" + " \n")
+                    text_file.write("</div>" + " \n")
+                    text_file.write("</body>" + " \n")
+                    text_file.write("</html>" + " \n")
+                    text_file.close()
 
 class MyApp(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -532,9 +733,10 @@ class MyApp(QtGui.QWidget):
         #set connections
         self.connect(self.runButton, QtCore.SIGNAL("released()"), self.test)
         self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.cancel)
+        #self.cancelButton.clicked.connect(WorkThread1.kill(self))
         #misc
         self.setGeometry(300, 300, 500, 130)
-        self.setWindowTitle('threads')
+        self.setWindowTitle('Index')
 
     def add1(self, text):
         num = int(float(text))
@@ -560,6 +762,17 @@ class MyApp(QtGui.QWidget):
         self.workThread.start()
 
     def cancel(self):
+        file = open(os.path.dirname(__file__) + "\\subscripts\\" + "kill.txt", "w")
+        file.write('True')
+        file.close()
+        self.layout.removeWidget(self.cancelButton)
+        self.cancelButton.deleteLater()
+        self.cancelButton = None
+        self.cancelButton = QtGui.QPushButton("Quit")
+        self.layout.addWidget(self.cancelButton,0,11,2,11, QtCore.Qt.AlignRight)
+        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.quit)
+
+    def quit(self):
         self.close()
 
 class MyAppII(QtGui.QWidget):
@@ -589,7 +802,7 @@ class MyAppII(QtGui.QWidget):
         self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.cancel)
         #misc
         self.setGeometry(300, 300, 500, 130)
-        self.setWindowTitle('threads')
+        self.setWindowTitle('DB upload')
 
     def add1(self, text):
         num = int(float(text))
@@ -620,6 +833,11 @@ class MyAppII(QtGui.QWidget):
 
     def add5(self, text):
         tt = str(text)
+        self.wk2label3.hide()
+        self.wk2label3.setText(tt)
+
+    def add6(self, text):
+        tt = str(text)
         self.wk2label3.setText(tt)
         self.layout.removeWidget(self.pgr)
         self.pgr.deleteLater()
@@ -635,7 +853,7 @@ class MyAppII(QtGui.QWidget):
         self.wk2label2 = None
         self.cancelButton = QtGui.QPushButton("Quit")
         self.layout.addWidget(self.cancelButton,0,11,2,11, QtCore.Qt.AlignRight)
-        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.cancel)
+        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.quit4real)
 
     def test(self):
         self.pgr.setValue(0)
@@ -645,10 +863,105 @@ class MyAppII(QtGui.QWidget):
         self.connect(self.workThread2, QtCore.SIGNAL("update5(QString)"), self.add3)
         self.connect(self.workThread2, QtCore.SIGNAL("update6(QString)"), self.add4)
         self.connect(self.workThread2, QtCore.SIGNAL("update7(QString)"), self.add5)
+        self.connect(self.workThread2, QtCore.SIGNAL("update8(QString)"), self.add6)
         self.workThread2.start()
 
     def cancel(self):
+        file = open(os.path.dirname(__file__) + "\\subscripts\\" + "kill.txt", "w")
+        file.write('True')
+        file.close()
+        self.layout.removeWidget(self.cancelButton)
+        self.cancelButton.deleteLater()
+        self.cancelButton = None
+        self.cancelButton = QtGui.QPushButton("Show Results")
+        self.layout.addWidget(self.cancelButton, 0, 11, 2, 11, QtCore.Qt.AlignRight)
+        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.quit)
+
+    def quit(self):
+        self.wk2label3.show()
+        self.layout.removeWidget(self.pgr)
+        self.pgr.deleteLater()
+        self.pgr = None
+        self.layout.removeWidget(self.cancelButton)
+        self.cancelButton.deleteLater()
+        self.cancelButton = None
+        self.layout.removeWidget(self.wk2label)
+        self.wk2label.deleteLater()
+        self.wk2label = None
+        self.layout.removeWidget(self.wk2label2)
+        self.wk2label2.deleteLater()
+        self.wk2label2 = None
+        self.cancelButton = QtGui.QPushButton("Quit")
+        self.layout.addWidget(self.cancelButton,0,11,2,11, QtCore.Qt.AlignRight)
+        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.quit4real)
+
+    def quit4real(self):
         self.close()
+
+class MyAppIII(QtGui.QWidget):
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+        #make gui attributes
+
+        self.runButton = QtGui.QPushButton("Run")
+        self.cancelButton = QtGui.QPushButton("Cancel")
+        self.pgr = QtGui.QProgressBar(self)
+        self.label = QtGui.QLabel()
+        self.label2 = QtGui.QLabel()
+        #set gui layout
+        self.layout = QtGui.QGridLayout(self)
+        self.layout.setSpacing(10)
+        self.runButton.setMaximumSize(75, 23)
+        self.cancelButton.setMaximumSize(75, 23)
+        self.layout.addWidget(self.runButton, 0,9,2,9, QtCore.Qt.AlignRight)
+        self.layout.addWidget(self.cancelButton,0,11,2,11, QtCore.Qt.AlignRight)
+        self.layout.addWidget(self.pgr,1,0,2,0)
+        self.layout.addWidget(self.label,0,1,2,1)
+        self.layout.addWidget(self.label2,0,2,5,1)
+        #set connections
+        self.connect(self.runButton, QtCore.SIGNAL("released()"), self.test)
+        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.cancel)
+        #misc
+        self.setGeometry(300, 300, 500, 130)
+        self.setWindowTitle('Hist')
+
+    def add1(self, text):
+        num = int(float(text))
+        self.pgr.setValue(num)
+        if num == 100:
+            self.label.setText("Hist mining done!")
+
+    def add2(self, text):
+        try:
+            self.layout.removeWidget(self.runButton)
+            self.runButton.deleteLater()
+            self.runButton = None
+        except AttributeError as e:
+            pass
+        stext = str(text)
+        self.label.setText(stext)
+
+    def test(self):
+        self.pgr.setValue(0)
+        self.workThread = WorkThread3()
+        self.connect(self.workThread, QtCore.SIGNAL("update2(QString)"), self.add2)
+        self.connect(self.workThread, QtCore.SIGNAL("update1(QString)"), self.add1)
+        self.workThread.start()
+
+    def cancel(self):
+        file = open(os.path.dirname(__file__) + "\\subscripts\\" + "kill.txt", "w")
+        file.write('True')
+        file.close()
+        self.layout.removeWidget(self.cancelButton)
+        self.cancelButton.deleteLater()
+        self.cancelButton = None
+        self.cancelButton = QtGui.QPushButton("Quit")
+        self.layout.addWidget(self.cancelButton,0,11,2,11, QtCore.Qt.AlignRight)
+        self.connect(self.cancelButton, QtCore.SIGNAL("released()"), self.quit)
+
+    def quit(self):
+        self.close()
+
 
 class RSQC:
     """QGIS Plugin Implementation."""
@@ -691,6 +1004,7 @@ class RSQC:
         self.dlg.pushButton_index1.clicked.connect(self.getIndexes)
         self.dlg.pushButton_InputDB.clicked.connect(self.showFileSelectDialogInputDB)
         self.dlg.pushButton_InputPPC.clicked.connect(self.showFileSelectDialogInputPPC)
+        self.dlg.pushButton_InputImageDir.clicked.connect(self.showFileSelectDialogInputImageDir)
         self.dlg.radioButtonPPC_ob.toggled.connect(self.radio1_ob_clicked)
         self.dlg.radioButtonPPC_Nadir.toggled.connect(self.radio1_Nadir_clicked)
 
@@ -707,10 +1021,14 @@ class RSQC:
         self.dlg.lineEditTilt.setText(self.Tilt)
         self.dlg.checkBoxRef.setChecked(True)
         self.dlg.lineEditRef.setText('ETRS89,UTM32N,DVR90')
+        #temp
+        self.dlg.lineEditImageDir.setText('D:\\Image_tiffjpeg_test\\Image_JPEG')
+        #temp
         self.dlg.radioButtonPPC_ob.setChecked(True)
         self.dlg.radioButtonPPC_Nadir.setChecked(True)
         self.dlg.radioButtonDB_Nadir.setChecked(True)
         self.dlg.radioButtonDBQC_Nadir.setChecked(True)
+        self.dlg.radioButtonDB_Nadir_2.setChecked(True)
         self.dlg.db_name.setText(self.DBname)
         self.dlg.db_host.setText(self.DBhost)
         self.dlg.db_port.setText(self.DBport)
@@ -721,6 +1039,12 @@ class RSQC:
         self.dlg.db_port_2.setText(self.DBport)
         self.dlg.db_user_2.setText(self.DBuser)
         self.dlg.db_password_2.setText(self.DBpass)
+        self.dlg.db_name_3.setText(self.DBname)
+        self.dlg.db_host_3.setText(self.DBhost)
+        self.dlg.db_port_3.setText(self.DBport)
+        self.dlg.db_user_3.setText(self.DBuser)
+        self.dlg.db_password_3.setText(self.DBpass)
+
 
         # set values from settings file
         self.dlg.label_15.setText('Index name in DB ('+self.DBtable+')')
@@ -787,7 +1111,6 @@ class RSQC:
         # remove the toolbar
         del self.toolbar
 
-
     @property
     def readSettings(self):
         settingsFile = os.path.dirname(__file__) + "\\settings.txt"
@@ -808,6 +1131,11 @@ class RSQC:
         fname = QFileDialog.getExistingDirectory(None, 'Open camera calibration directory', os.path.dirname(os.path.realpath(__file__)))
         fname = string.replace(fname, '\\', '/')
         self.dlg.lineEditCamDir.setText(fname)
+
+    def showFileSelectDialogInputImageDir(self):
+        fname = QFileDialog.getExistingDirectory(None, 'Open camera calibration directory', os.path.dirname(os.path.realpath(__file__)))
+        fname = string.replace(fname, '\\', '/')
+        self.dlg.lineEditImageDir.setText(fname)
 
     def radio1_ob_clicked(self, enabled):
         if enabled:
@@ -1234,7 +1562,45 @@ class RSQC:
                             self.window.show()
 
             elif str(currentIndex) == "3":
-                pass
+                path = self.dlg.lineEditImageDir.text()
+                drevnavn = FindUSBname.getusbname(os.path.splitdrive(path)[0])
+                if self.dlg.useSelectedDB_2.isChecked():
+                    select = 1
+                else:
+                    select = 2
+                if self.dlg.OverwriteDB_2.isChecked():
+                    overwritedata = 1
+                else:
+                    overwritedata = 2
+                if self.dlg.radioButtonDB_ob_2.isChecked():
+                    file = open(os.path.dirname(__file__) + "\\subscripts\\" + "DBinfo2.txt", "w")
+                    file.write(str(overwritedata))
+                    file.write('\n')
+                    file.write(str(select))
+                    file.write('\n')
+                    file.write(str(path))
+                    file.write('\n')
+                    file.write(str(drevnavn))
+                    file.write('\n')
+                    file.write(self.DB_footprint)
+                    file.close()
+                    self.window = MyAppIII()
+                    self.window.show()
+                elif self.dlg.radioButtonDB_Nadir_2.isChecked():
+                    file = open(os.path.dirname(__file__) + "\\subscripts\\" + "DBinfo2.txt", "w")
+                    file.write(str(overwritedata))
+                    file.write('\n')
+                    file.write(str(select))
+                    file.write('\n')
+                    file.write(str(path))
+                    file.write('\n')
+                    file.write(str(drevnavn))
+                    file.write('\n')
+                    file.write(self.DB_ppc)
+                    file.close()
+                    self.window = MyAppIII()
+                    self.window.show()
+
             elif str(currentIndex) == "4":
                 try:
                     import subprocess
@@ -1253,16 +1619,22 @@ class RSQC:
                             for filename in [f for f in filenames if f.endswith(".tif")]:
                                 ImageNames.append(filename)
                     elif self.dlg.radioButtonDBQC_Nadir.isChecked():
-                        ImageNames = os.listdir(ImageDirPath)
+                        ImageNames = glob.glob(ImageDirPath +"\\*.jpg")
+                        if not ImageNames:
+                            ImageNames = glob.glob(ImageDirPath+"\\*.tif")
 
                     for i in ImageNames:
-                        if i.endswith('tif'):
-                            ImageID.append(os.path.basename(os.path.normpath(i)))
-                            basename.append(os.path.splitext(os.path.normpath(i))[0])
-                        elif i.endswith('jpg'):
-                            ImageID.append(os.path.basename(os.path.normpath(i)))
-                            basename.append(os.path.splitext(os.path.normpath(i))[0])
+                        name = os.path.basename(os.path.normpath(i))
+                        basename.append(os.path.splitext(os.path.normpath(i))[0])
+                        if self.dlg.radioButtonDBQC_ob.isChecked():
+                            ImageID.append(name[0:26])
+                        elif self.dlg.radioButtonDBQC_Nadir.isChecked():
+                            ImageID.append(name[0:18])
+
                     blok = ImageID[0][5:10]
+
+                    for i in ImageID:
+                        print i
 
                     # Herunder skabes link til database
                     DB_name = self.dlg.db_name_2.text()
@@ -1289,7 +1661,7 @@ class RSQC:
                     foundcount = 0
                     notfoundcount = 0
 
-                    for names in basename:
+                    for names in ImageID:
                         cur.execute("select exists(select from " + DB_schema + '.' + DB_table + " where imageID=%s)", (names,))
                         if cur.fetchone()[0]:
                             foundcount += 1

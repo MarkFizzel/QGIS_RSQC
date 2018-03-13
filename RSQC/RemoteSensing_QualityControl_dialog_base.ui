@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>493</width>
-    <height>588</height>
+    <width>566</width>
+    <height>672</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>550</y>
+     <x>200</x>
+     <y>630</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -34,12 +34,12 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>481</width>
-     <height>541</height>
+     <width>551</width>
+     <height>621</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -76,7 +76,7 @@
       <rect>
        <x>18</x>
        <y>57</y>
-       <width>161</width>
+       <width>201</width>
        <height>16</height>
       </rect>
      </property>
@@ -102,8 +102,8 @@
       <rect>
        <x>38</x>
        <y>127</y>
-       <width>341</width>
-       <height>221</height>
+       <width>391</width>
+       <height>281</height>
       </rect>
      </property>
     </widget>
@@ -112,8 +112,8 @@
       <rect>
        <x>308</x>
        <y>77</y>
-       <width>131</width>
-       <height>23</height>
+       <width>141</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -125,8 +125,8 @@
       <rect>
        <x>8</x>
        <y>77</y>
-       <width>281</width>
-       <height>20</height>
+       <width>291</width>
+       <height>31</height>
       </rect>
      </property>
     </widget>
@@ -140,7 +140,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>  </string>
+      <string/>
      </property>
     </widget>
    </widget>
@@ -476,7 +476,7 @@
       <rect>
        <x>30</x>
        <y>230</y>
-       <width>441</width>
+       <width>481</width>
        <height>111</height>
       </rect>
      </property>
@@ -486,7 +486,7 @@
      <widget class="QComboBox" name="inShapeDB">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>40</x>
         <y>20</y>
         <width>401</width>
         <height>22</height>
@@ -497,7 +497,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>70</y>
         <width>221</width>
         <height>17</height>
        </rect>
@@ -509,7 +509,7 @@
      <widget class="QRadioButton" name="radioButtonDB_ob">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>320</x>
         <y>60</y>
         <width>201</width>
         <height>17</height>
@@ -522,7 +522,7 @@
      <widget class="QRadioButton" name="radioButtonDB_Nadir">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>320</x>
         <y>80</y>
         <width>201</width>
         <height>17</height>
@@ -551,7 +551,7 @@
       <rect>
        <x>30</x>
        <y>20</y>
-       <width>441</width>
+       <width>481</width>
        <height>181</height>
       </rect>
      </property>
@@ -561,8 +561,8 @@
      <widget class="QLineEdit" name="db_name">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>30</y>
+        <x>140</x>
+        <y>20</y>
         <width>261</width>
         <height>20</height>
        </rect>
@@ -571,8 +571,8 @@
      <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>30</y>
+        <x>60</x>
+        <y>20</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -584,8 +584,8 @@
      <widget class="QLineEdit" name="db_host">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>60</y>
+        <x>140</x>
+        <y>50</y>
         <width>261</width>
         <height>20</height>
        </rect>
@@ -594,8 +594,8 @@
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>60</y>
+        <x>60</x>
+        <y>50</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -607,8 +607,8 @@
      <widget class="QLineEdit" name="db_user">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>90</y>
+        <x>140</x>
+        <y>80</y>
         <width>261</width>
         <height>20</height>
        </rect>
@@ -617,8 +617,8 @@
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>90</y>
+        <x>60</x>
+        <y>80</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -630,8 +630,8 @@
      <widget class="QLineEdit" name="db_password">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>120</y>
+        <x>140</x>
+        <y>110</y>
         <width>261</width>
         <height>20</height>
        </rect>
@@ -640,8 +640,8 @@
      <widget class="QLabel" name="label_8">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>120</y>
+        <x>60</x>
+        <y>110</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -653,8 +653,8 @@
      <widget class="QLineEdit" name="db_port">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>150</y>
+        <x>140</x>
+        <y>140</y>
         <width>261</width>
         <height>20</height>
        </rect>
@@ -663,8 +663,8 @@
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>150</y>
+        <x>60</x>
+        <y>140</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -675,60 +675,263 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>#4 NAS</string>
+    </attribute>
+    <widget class="QListWidget" name="listWidget1_2">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>20</y>
+       <width>391</width>
+       <height>281</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Upload data til NAS før du fortsætter til #5</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
    <widget class="QWidget" name="tab_Disk">
     <attribute name="title">
-     <string>#4 - Disk</string>
+     <string>#5 - Histogram</string>
     </attribute>
-    <widget class="QGroupBox" name="groupBox_4">
+    <widget class="QCheckBox" name="OverwriteDB_2">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>350</y>
+       <width>181</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Overwrite existing DB files</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_8">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>10</y>
-       <width>441</width>
-       <height>441</height>
+       <y>230</y>
+       <width>481</width>
+       <height>111</height>
       </rect>
      </property>
      <property name="title">
-      <string>Path to image dir:</string>
+      <string>Histogram mining</string>
      </property>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QCheckBox" name="useSelectedDB_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Use only selected features</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButtonDB_ob_2">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>60</y>
+        <width>201</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Oblique ( footprints2018)</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButtonDB_Nadir_2">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>80</y>
+        <width>201</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Nadir ( ppc2018)</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelImageDir">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>421</width>
-        <height>401</height>
+        <width>151</width>
+        <height>21</height>
        </rect>
       </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;####  Only for SDFE!  ####&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;     &lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;###INFO###&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;1. Brug notepad++ til at åbne filen &amp;quot;CheckImages.bat&amp;quot; som ligger i 'C:/temp/imageQC/' på arbejds PC'erne&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;2. Rediger filen, så den passet til den aktuelle disc:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt;################################################&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt;##   python RunAllFilesInDir.py -i &lt;/span&gt;&lt;span style=&quot; font-size:7pt; font-weight:600;&quot;&gt;J:\Block_81_07\Image_JPEG\&lt;/span&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt; -s 1  ##&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt;##   		|       |       |      |       |       |          	 ##&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt;##   		v      v       v     v      v       v           ##&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt;##  python RunAllFilesInDir.py -i &lt;/span&gt;&lt;span style=&quot; font-size:7pt; font-weight:600;&quot;&gt;H:\Block_83_30\Image_TIFF\&lt;/span&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt; -s 1  ##&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7pt;&quot;&gt;################################################&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:7pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;3. Kør til slut bat-filen fra en Osgeo4w shell.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;4. Når scriptet er færdig er #3 slut!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <property name="text">
+       <string>Path to image dir:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditImageDir">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>20</y>
+        <width>331</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_InputImageDir">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>20</y>
+        <width>31</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>...</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBoxCredentials_3">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>481</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Database credentials</string>
+     </property>
+     <widget class="QLineEdit" name="db_name_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>20</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Database</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="db_host_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>50</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>50</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hostname</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="db_user_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>80</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>80</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Username</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="db_password_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>110</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>110</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Password</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="db_port_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>140</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>140</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Port</string>
       </property>
      </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_DBQC">
     <attribute name="title">
-     <string>#5 - DB QC</string>
+     <string>#6 - DB QC</string>
     </attribute>
     <widget class="QLabel" name="labelImageDir_2">
      <property name="geometry">
@@ -774,7 +977,7 @@ p, li { white-space: pre-wrap; }
       <rect>
        <x>30</x>
        <y>230</y>
-       <width>441</width>
+       <width>481</width>
        <height>91</height>
       </rect>
      </property>
@@ -784,9 +987,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QComboBox" name="inShapeAImage">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>30</x>
         <y>20</y>
-        <width>401</width>
+        <width>411</width>
         <height>22</height>
        </rect>
       </property>
@@ -823,7 +1026,7 @@ p, li { white-space: pre-wrap; }
       <rect>
        <x>30</x>
        <y>20</y>
-       <width>441</width>
+       <width>481</width>
        <height>181</height>
       </rect>
      </property>
@@ -833,9 +1036,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QLineEdit" name="db_name_2">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>30</y>
-        <width>321</width>
+        <x>140</x>
+        <y>20</y>
+        <width>261</width>
         <height>20</height>
        </rect>
       </property>
@@ -843,8 +1046,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>30</y>
+        <x>60</x>
+        <y>20</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -856,9 +1059,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QLineEdit" name="db_host_2">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>60</y>
-        <width>321</width>
+        <x>140</x>
+        <y>50</y>
+        <width>261</width>
         <height>20</height>
        </rect>
       </property>
@@ -866,8 +1069,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_11">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>60</y>
+        <x>60</x>
+        <y>50</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -879,9 +1082,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QLineEdit" name="db_user_2">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>90</y>
-        <width>321</width>
+        <x>140</x>
+        <y>80</y>
+        <width>261</width>
         <height>20</height>
        </rect>
       </property>
@@ -889,8 +1092,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_12">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>90</y>
+        <x>60</x>
+        <y>80</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -902,9 +1105,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QLineEdit" name="db_password_2">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>120</y>
-        <width>321</width>
+        <x>140</x>
+        <y>110</y>
+        <width>261</width>
         <height>20</height>
        </rect>
       </property>
@@ -912,8 +1115,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>120</y>
+        <x>60</x>
+        <y>110</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -925,9 +1128,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QLineEdit" name="db_port_2">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>150</y>
-        <width>321</width>
+        <x>140</x>
+        <y>140</y>
+        <width>261</width>
         <height>20</height>
        </rect>
       </property>
@@ -935,8 +1138,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_14">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>150</y>
+        <x>60</x>
+        <y>140</y>
         <width>101</width>
         <height>16</height>
        </rect>
