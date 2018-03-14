@@ -45,8 +45,7 @@ This plugin contains 6 tabs with the following functions:
 
 6: Completion QC. Checks that every PPC or Footprint in the database hase a has a corresponding image on disc. 
 
-Plugin is for use internally in SDFE 09-10-2017 
-
+Plugin is for use internally in SDFE 09-10-2017
 tracker=github.com
 repository=github.com
 
