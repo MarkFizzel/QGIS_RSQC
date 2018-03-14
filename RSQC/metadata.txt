@@ -17,10 +17,7 @@
 [general]
 name=RS QC
 qgisMinimumVersion=2.0
-description=
-
-Quality Control for Remote Sensing
-
+description=Quality Control for Remote Sensing
 
 version=1.0
 
@@ -48,10 +45,7 @@ This plugin contains 6 tabs with the following functions:
 
 6: Completion QC. Checks that every PPC or Footprint in the database hase a has a corresponding image on disc. 
 
------------------------------------------------------- 
 Plugin is for use internally in SDFE 09-10-2017 
-
--MF
 
 tracker=github.com
 repository=github.com
