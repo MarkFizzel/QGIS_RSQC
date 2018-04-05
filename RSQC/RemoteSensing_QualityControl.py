@@ -228,6 +228,7 @@ class WorkThread2(QtCore.QThread):
             DB_geom = "geom"
             (DB_name, DB_host, DB_port, DB_user, DB_pass, overwritedata, select, layer1, DB_table) = SubScripts.readtxt2()
             layer = QgsMapLayerRegistry.instance().mapLayersByName(layer1)[0]
+            killed = ''
 
             if select == '1':
                selection = layer.selectedFeatures()
@@ -1506,8 +1507,8 @@ class RSQC:
                 allLayers = canvas.layers()
 
                 for i in allLayers:
-                    # QMessageBox.information(None, "status",i.name())
                     if (i.name() == inputFilNavn):
+                        #QMessageBox.information(None, "status", i.name())
                         if self.dlg.useSelectedDB.isChecked():
                             select = 1
                         else:
@@ -1532,7 +1533,7 @@ class RSQC:
                             file.write('\n')
                             file.write(str(select))
                             file.write('\n')
-                            file.write(str(layer.name()))
+                            file.write(str(i.name()))
                             file.write('\n')
                             file.write(self.DB_footprint)
                             file.close()
@@ -1554,7 +1555,7 @@ class RSQC:
                             file.write('\n')
                             file.write(str(select))
                             file.write('\n')
-                            file.write(str(layer.name()))
+                            file.write(str(i.name()))
                             file.write('\n')
                             file.write(self.DB_ppc)
                             file.close()

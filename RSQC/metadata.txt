@@ -1,70 +1,38 @@
 # This file contains metadata for your plugin. Since 
-
 # version 2.0 of QGIS this is the proper way to supply 
-
 # information about a plugin. The old method of 
-
 # embedding metadata in __init__.py will 
-
 # is no longer supported since version 2.0.
 
-
-# This file should be included when you package your plugin.
-# Mandatory items:
-
-
+# This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=RS QC
+name=RSQC
 qgisMinimumVersion=2.0
-description=Quality Control for Remote Sensing
-
-version=1.2
-
-
-author=Mark Falkenberg & Andrew Flatman/ SDFE.dk
-
-
+description=Remote Sensing Quality Control
+version=0.2
+author=Mark Falkenerg/ SDFE
 email=mafal@sdfe.dk
 
+about=This plugin contains 6 tabs with the following functions: 1:Indexinng of folders or disks 2: PPC or Footprint format and attributes check. (GDS, SunAngle, Tilt, reference sysmtem...). 3: Upload of PPC or Footprint to SDFE database. 4:instruction to upload data to NAS 5:Image histogram mining 6: Completion QC. Checks that every PPC or Footprint in the database hase a has a corresponding image on disc. ------------------------------------------------------ Plugin is for use internally in SDFE 09-10-2017 -MF
 
-
-about=Quality Control for various Remote Sensing productions. 
-
-This plugin contains 6 tabs with the following functions: 
-
-1:Indexinng of folders or disks
-
-2: PPC or Footprint format and attributes check. (GDS, SunAngle, Tilt, reference sysmtem...). 
-
-3: Upload of PPC or Footprint to SDFE database. 
-
-4:instruction to upload data to NAS
-
-5:Image histogram mining 
-
-6: Completion QC. Checks that every PPC or Footprint in the database hase a has a corresponding image on disc. 
-
-tracker=github.com
-repository=github.com
-
-
+tracker=Github
+repository=https://github.com/GEO-RS/QGIS_RSQC
 # End of mandatory metadata
 
 # Recommended items:
 
-
 # Uncomment the following line and add your changelog:
-# changelog=
-
+ changelog=
+ 	04-04-2018 0.2 Plugin updated - small changes
+	13-03-2018 0.1 Plugin created
 
 # Tags are comma separated with spaces allowed
-tags=RS QC
+tags=python
 
-homepage=github.com
+homepage=http://homepage
 category=Plugins
 icon=icon.png
-
 # experimental flag
 experimental=True
 
