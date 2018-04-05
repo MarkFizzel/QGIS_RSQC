@@ -30,7 +30,7 @@ repository=https://github.com/GEO-RS/QGIS_RSQC
 # Tags are comma separated with spaces allowed
 tags=python
 
-homepage=http://homepage
+homepage=https://github.com/GEO-RS/QGIS_RSQC
 category=Plugins
 icon=icon.png
 # experimental flag
